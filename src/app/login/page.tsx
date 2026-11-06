@@ -14,7 +14,7 @@ export default function LoginPage() {
       <h1 id="login-title">Welcome back</h1>
       <p>Sign in to continue to your agency workspace.</p>
       <LoginForm />
-      <div className="login-footnote">Access is by invitation only. Contact your workspace administrator if you need an account.</div>
+      <div className="login-footnote">First time here? Open your invitation email to create your password. Access is by invitation only; contact your workspace administrator if you need an account.</div>
     </section>
   </main>;
 }

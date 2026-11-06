@@ -20,7 +20,7 @@ export function ForgotPasswordForm() {
     try {
       const supabase = createClient();
       const { error: requestError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: `${window.location.origin}/auth/update-password`,
+        redirectTo: `${window.location.origin}/auth/callback?flow=recovery`,
       });
       if (requestError) throw requestError;
       setMessage("If an account matches that email, a password reset link will arrive shortly.");
@@ -44,7 +44,7 @@ export function ForgotPasswordForm() {
   </form>;
 }
 
-export function UpdatePasswordForm() {
+export function UpdatePasswordForm({ flow = "recovery" }: { flow?: "invite" | "recovery" }) {
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -71,7 +71,7 @@ export function UpdatePasswordForm() {
       if (updateError) throw updateError;
       setPassword("");
       setConfirmation("");
-      setMessage("Your password has been updated. You can now sign in.");
+      setMessage(flow === "invite" ? "Your account is activated. You can now sign in." : "Your password has been updated. You can now sign in.");
     } catch {
       setError("This reset link is invalid or expired. Request a new link and try again.");
     } finally {
@@ -80,12 +80,12 @@ export function UpdatePasswordForm() {
   }
 
   return <form className="login-form" onSubmit={submit}>
-    <label htmlFor="new-password">New password</label>
+    <label htmlFor="new-password">{flow === "invite" ? "Create password" : "New password"}</label>
     <input id="new-password" type="password" autoComplete="new-password" minLength={8} required value={password} onChange={event => setPassword(event.target.value)} />
-    <label htmlFor="confirm-password">Confirm new password</label>
+    <label htmlFor="confirm-password">{flow === "invite" ? "Confirm password" : "Confirm new password"}</label>
     <input id="confirm-password" type="password" autoComplete="new-password" minLength={8} required value={confirmation} onChange={event => setConfirmation(event.target.value)} />
     {error && <div className="form-error" role="alert">{error}</div>}
     {message && <div className="setup-notice" role="status">{message} <Link href="/login">Sign in</Link></div>}
-    {!message && <button className="button button-primary login-submit" type="submit" disabled={busy || !configured}>{busy ? "Updating password…" : "Update password"}</button>}
+    {!message && <button className="button button-primary login-submit" type="submit" disabled={busy || !configured}>{busy ? "Saving password…" : flow === "invite" ? "Activate account" : "Update password"}</button>}
   </form>;
 }
