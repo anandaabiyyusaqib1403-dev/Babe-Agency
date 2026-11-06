@@ -4,6 +4,7 @@ import { Button, EmptyState, Input, Select, Textarea } from "@/components/ui";
 import { saveAgencySettingsAction, saveBillingProfileAction, saveTaskNotificationPreferenceAction } from "@/app/actions/settings-actions";
 import { getActiveWorkspaceContext } from "@/lib/workspace-access";
 import { SetupNotice } from "@/components/setup-notice";
+import { ChangePasswordForm } from "@/components/change-password-form";
 import "./settings.css";
 
 const sections = [
@@ -93,7 +94,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
 
         {section === "preferences" && <div className="settings-panel"><p className="settings-subheading">Regional settings</p><dl className="settings-details"><div><dt>Timezone</dt><dd>{agency?.timezone ?? "Asia/Jakarta"}</dd></div><div><dt>Date format</dt><dd>{agency?.date_format ?? "dd MMM yyyy"}</dd></div><div><dt>Currency</dt><dd>{agency?.currency ?? "IDR"}</dd></div><div><dt>Time format</dt><dd>24-hour (workspace default)</dd></div></dl><p className="settings-note">Regional values are managed by an agency administrator under Agency Profile. Personal display preferences, table rows, and calendar view are not persisted by the current schema.</p><Link className="ui-button" href="/settings?section=agency">Open Agency Profile</Link></div>}
 
-        {section === "security" && <div className="settings-panel"><p className="settings-subheading">Password management</p><p className="settings-note">Passwords are managed by Supabase Auth. Use the secure password recovery flow to set a new password.</p><Link className="ui-button ui-button-primary" href="/auth/forgot-password">Reset password</Link><p className="settings-subheading settings-spaced">Current account</p><dl className="settings-details"><div><dt>Email</dt><dd>{email}</dd></div><div><dt>Status</dt><dd>{ctx.member.is_active ? "Active agency member" : "Inactive"}</dd></div><div><dt>Authentication provider</dt><dd>{provider}</dd></div></dl><Link className="ui-button settings-signout" href="/auth/signout">Sign out</Link><p className="settings-note">Other-session sign out is not exposed by the current authentication setup.</p></div>}
+        {section === "security" && <div className="settings-panel"><p className="settings-subheading">Change password</p><p className="settings-note">Confirm your current password, then choose a new one. Passwords are stored and verified by Supabase Auth.</p><ChangePasswordForm email={email} /><p className="settings-note">Can’t sign in with your current password? <Link href="/auth/forgot-password">Reset it by email</Link>.</p><p className="settings-subheading settings-spaced">Current account</p><dl className="settings-details"><div><dt>Email</dt><dd>{email}</dd></div><div><dt>Status</dt><dd>{ctx.member.is_active ? "Active agency member" : "Inactive"}</dd></div><div><dt>Authentication provider</dt><dd>{provider}</dd></div></dl><Link className="ui-button settings-signout" href="/auth/signout">Sign out</Link><p className="settings-note">Other-session sign out is not exposed by the current authentication setup.</p></div>}
       </section>
     </div>
   </WorkspaceShell>;
