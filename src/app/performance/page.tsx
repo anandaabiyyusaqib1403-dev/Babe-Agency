@@ -1,4 +1,3 @@
-export const instant = false;
 import Link from "next/link";
 import { Button, EmptyState, Input, Select, Textarea } from "@/components/ui";
 import { WorkspaceShell } from "@/components/workspace-shell";
@@ -172,7 +171,7 @@ export default async function PerformancePage({ searchParams }: { searchParams: 
     frozenSnapshot = versionQuery.data as typeof frozenSnapshot;
   }
 
-  return <WorkspaceShell title={surface === "reports" ? "Reports" : "Performance"} section={`Insights / ${surface === "reports" ? "Reports" : "Performance"}`} memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
+  return <WorkspaceShell title={surface === "reports" ? "Reports & Recap" : "Performance Insights"} section={`Growth & Insights / ${surface === "reports" ? "Reports & Recap" : "Performance Insights"}`} memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
     <div className="workspace-section">
       <nav className="workspace-tabs" aria-label="Insights sections">
         <Link href="/performance?tab=performance" aria-current={surface === "performance" ? "page" : undefined}>Performance</Link>

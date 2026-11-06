@@ -8,8 +8,6 @@ import { SetupNotice } from "@/components/setup-notice";
 import { createWorkspaceClient, archiveWorkspaceClient } from "@/app/actions/workspace-actions";
 import { ClientForm } from "@/components/workspace/client-form";
 
-export const instant = false;
-
 type Params = Record<string, string | string[] | undefined>;
 const states = ["lead", "active", "inactive", "archived"] as const;
 const pageSize = 20;
@@ -41,7 +39,7 @@ export default async function ClientsPage({ searchParams }: { searchParams: Prom
   const href = (nextPage: number) => { const p = new URLSearchParams(); for (const [key, v] of [["q", q], ["status", status], ["industry", industry], ["sort", sortKey], ["direction", direction]] as const) if (v) p.set(key, v); p.set("page", String(nextPage)); return `/clients?${p.toString()}`; };
   const date = (v: string) => new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeZone: "Asia/Jakarta" }).format(new Date(v));
 
-  return <WorkspaceShell title="Clients" section="Workspace / Clients" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
+  return <WorkspaceShell title="Client Portfolio" section="Studio / Client Portfolio" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
     <div className="workspace-page">
       <header className="workspace-page-intro"><div><p>Kelola hubungan client, paket layanan, dan strategi konten.</p></div><a className="ui-button ui-button-primary" href="#add-client">Add Client</a></header>
       <div className="client-summary" aria-label="Client summary">{["Total clients", "Active", "Leads", "Inactive"].map((label, index) => <div className="client-summary-item" key={label}><span>{label}</span><strong>{index === 0 ? number(states.reduce((total, _, i) => total + (summaries[i].count ?? 0), 0)) : number(summaries[index].count)}</strong></div>)}</div>

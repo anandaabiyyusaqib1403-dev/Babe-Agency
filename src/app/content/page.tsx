@@ -1,4 +1,3 @@
-export const instant = false;
 import Link from "next/link";
 import { Button, EmptyState, Input, Select, Table } from "@/components/ui";
 import { WorkspaceShell } from "@/components/workspace-shell";
@@ -76,7 +75,7 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
   function calendarLink(date: string) { const p = new URLSearchParams(filterHref(page).split("?")[1]); p.set("date", date); p.delete("page"); return `/content?${p.toString()}`; }
   const monthLabel = new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(new Date(`${startDate}T00:00:00+07:00`));
 
-  return <WorkspaceShell title="Content Planner" section="Workspace / Content Planner" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
+  return <WorkspaceShell title="Content Planner" section="Creative Workflow / Content Studio / Content Planner" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
     <div className="workspace-page">
       <header className="workspace-page-intro"><div><p>Rencanakan produksi dan publikasi konten seluruh client.</p></div><a className="ui-button ui-button-primary" href="#add-content">Add Content</a></header>
       <Feedback saved={one(params,"saved")} error={one(params,"error")} />

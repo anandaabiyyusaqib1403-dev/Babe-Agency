@@ -6,10 +6,8 @@ import { getActiveWorkspaceContext } from "@/lib/workspace-access";
 import { SetupNotice } from "@/components/setup-notice";
 import "./settings.css";
 
-export const instant = false;
-
 const sections = [
-  ["profile", "My Profile"], ["agency", "Agency Profile"], ["members", "Members & Access"],
+  ["profile", "My Profile"], ["agency", "Agency Profile"], ["members", "Team & Members"],
   ["billing", "Billing Information"], ["integrations", "Integrations"], ["notifications", "Notifications"],
   ["preferences", "Preferences"], ["security", "Security"],
 ] as const;
@@ -54,7 +52,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
   const provider = typeof ctx.user.app_metadata.provider === "string" ? ctx.user.app_metadata.provider : "Supabase Auth";
   const initials = ctx.member.full_name.trim().split(/\s+/).slice(0, 2).map((part: string) => part[0]).join("").toUpperCase() || "BA";
 
-  return <WorkspaceShell title="Settings" section="Settings" memberName={ctx.member.full_name} memberEmail={email}>
+  return <WorkspaceShell title="Studio Settings" section="Settings / Studio Settings" memberName={ctx.member.full_name} memberEmail={email}>
     <div className="settings-layout">
       <nav className="settings-nav" aria-label="Settings sections">
         <p className="settings-nav-heading">SETTINGS</p>

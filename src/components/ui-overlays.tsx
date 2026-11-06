@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { createContext, useCallback, useContext, useEffect, useId, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
 import { Button } from "@/components/ui";
 
@@ -140,5 +140,36 @@ export function Toast({
   }, [open, duration, onClose]);
 
   if (!open) return null;
-  return <div className={`ui-toast ui-toast-${tone}`} role={tone === "danger" ? "alert" : "status"}>{children}</div>;
+  return <div className={`ui-toast ui-toast-${tone}`} role={tone === "danger" ? "alert" : "status"}>
+    <div className="ui-toast-message">{children}</div>
+    <Button variant="quiet" className="ui-toast-close" aria-label="Dismiss notification" onClick={onClose}><svg aria-hidden="true" viewBox="0 0 16 16"><path d="m4 4 8 8m0-8-8 8" /></svg></Button>
+  </div>;
+}
+
+type ToastTone = "neutral" | "success" | "danger";
+type ToastItem = { id: number; message: string; tone: ToastTone; duration: number };
+type ToastContextValue = { notify: (message: string, tone?: ToastTone, duration?: number) => void };
+const ToastContext = createContext<ToastContextValue | null>(null);
+
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const nextId = useRef(0);
+  const notify = useCallback((message: string, tone: ToastTone = "neutral", duration = 5000) => {
+    const id = nextId.current++;
+    setToasts(current => [...current, { id, message, tone, duration }].slice(-4));
+  }, []);
+  const dismiss = useCallback((id: number) => setToasts(current => current.filter(toast => toast.id !== id)), []);
+
+  return <ToastContext.Provider value={{ notify }}>
+    {children}
+    <div className="ui-toast-region" aria-label="Notifications" aria-live="polite">
+      {toasts.map(toast => <Toast key={toast.id} tone={toast.tone} duration={toast.duration} onClose={() => dismiss(toast.id)}>{toast.message}</Toast>)}
+    </div>
+  </ToastContext.Provider>;
+}
+
+export function useToast() {
+  const context = useContext(ToastContext);
+  if (!context) throw new Error("useToast must be used inside ToastProvider.");
+  return context.notify;
 }

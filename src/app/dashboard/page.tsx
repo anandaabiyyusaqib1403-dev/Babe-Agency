@@ -4,8 +4,6 @@ import { WorkspaceShell } from "@/components/workspace-shell";
 import { getActiveWorkspaceContext } from "@/lib/workspace-access";
 import { SetupNotice } from "@/components/setup-notice";
 
-export const instant = false;
-
 const contentStages = [
   ["idea", "Content ideas"], ["in_production", "In production"],
   ["internal_review", "Internal review"], ["client_review", "Client review"],
@@ -85,7 +83,7 @@ export default async function DashboardPage() {
   ].sort((a, b) => b.at.localeCompare(a.at)).slice(0, 8);
   const performanceRow = performanceResult.data as Record<string, unknown> | null;
 
-  return <WorkspaceShell title="Dashboard" section="Dashboard" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
+  return <WorkspaceShell title="Studio Overview" section="Studio / Studio Overview" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
     <div className="dashboard-page dashboard-v2">
       <header className="dashboard-intro dashboard-v2-intro">
         <div><p className="page-kicker">{greeting}, {ctx.member.full_name.split(/\s+/)[0]}</p><p className="page-description">Ringkasan aktivitas dan pekerjaan workspace BABE AGENCY.</p></div>

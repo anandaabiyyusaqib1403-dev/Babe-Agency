@@ -9,8 +9,6 @@ import { submitContentForReviewAction } from "@/app/actions/approval-actions";
 const title = (value: string) => value.replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
 const date = (value: string) => new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Jakarta" }).format(new Date(value));
 
-export const instant = false;
-
 export default async function ApprovalPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const ctx = await getActiveWorkspaceContext();
   if (!ctx) return <SetupNotice />;
@@ -55,7 +53,7 @@ export default async function ApprovalPage({ searchParams }: { searchParams: Pro
   const clientById = new Map((clients ?? []).map(row => [row.id, row.brand_name]));
   const memberById = new Map((members ?? []).map(row => [row.id, row.full_name]));
   const counts = new Map<string, number>([["pending", pendingCount.count ?? 0], ["revision_requested", revisionCount.count ?? 0], ["approved", approvedCount.count ?? 0], ["rejected", rejectedCount.count ?? 0]]);
-  return <WorkspaceShell title="Approval" section="Management / Approval" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
+  return <WorkspaceShell title="Review & Approval" section="Creative Workflow / Review & Approval" memberName={ctx.member.full_name} memberEmail={ctx.member.email}>
     <div className="workspace-page management-page">
       <header className="workspace-page-intro management-intro"><div><p>Review konten dan pantau keputusan tim dalam satu antrean.</p></div></header>
       {one("error") && <p className="workspace-inline-error" role="alert">{one("error")}</p>}
