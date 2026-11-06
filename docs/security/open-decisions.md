@@ -1,0 +1,23 @@
+# Authentication and authorization open decisions
+
+| Priority | Decision | Options | Recommendation | Impact |
+|---|---|---|---|---|
+| Critical | Hosted Supabase public sign-up and email confirmation settings | Public sign-up enabled/disabled; confirmation required/optional | Confirm setting read-only with project owner; disable self-signup and require verified email before access | Determines whether anyone can create an identity and how invite flow activates |
+| Critical | Reconcile repository migration history (13 local vs 12 remote) before policy changes | Compare and formally repair ledger; forward reconciliation; restore matching migration source | Do not run or repair migrations until bodies and actual remote schema are compared and backup/recovery plan exists | Current role/RLS source may differ from deployed state |
+| Critical | Map product roles to owner/admin/member and owner transfer | One fixed Head owner; multiple workspace owners; separate admin capability | Use permission-based grants; protect at least one owner; map Imam to owner-like capability only after explicit approval | Member administration and workspace ownership |
+| Critical | Finance role assignment and separation of duties | Finance Admin/Reviewer/Operator; owner-only; thresholded multi-approval | Approve capabilities separately; no automatic finance access by Head or Developer job title; separate creator from poster for material entries | Finance RLS and RPC permissions |
+| Critical | Remediation of 15 callable `SECURITY DEFINER` functions | Revoke all; grant selective; keep functions with hardened checks | Review individually by function and use least execute privilege; do not blanket-disable required functions | Privileged RPC, invoice, report, finance and document paths |
+| High | Leaked password protection | Enable now; defer pending product review | Enable Supabase compromised-password screening and define strength/length, with owner approval | Credential compromise risk; currently Advisor warning |
+| High | Invitation initiation policy and expiry duration | Admin-only; user activation request; both | Admin-only invitations for MVP; optional generic rate-limited request later; choose expiry (recommended 72 hours) | Email abuse, enumeration, expired-token behavior |
+| High | Deactivation/session revocation SLA | Immediate ban and global sign-out; short JWT expiry plus DB membership gate | Membership RLS denies immediately; Auth ban/revoke sessions where supported; define auditable revocation SLA | A stale session may exist after role/status change |
+| High | Account reactivation | Restore prior role; fresh invitation; approval by Head | Fresh audited admin action; require renewed verification if identity may be compromised | Status lifecycle and history |
+| High | Role/session update propagation | Read roles from DB each request; JWT claims with refresh; cached permissions | DB-current membership/permission check for sensitive operations; short cache with invalidation only if needed | Stale role grants after changes |
+| High | Deployed RLS inventory access | Approved read-only database catalog inspection; Supabase Dashboard export | Before implementing, inspect effective `pg_policies`, grants, functions and triggers after owner gives appropriate read-only access | Current effective policy cannot be certified from RLS-enabled flags alone |
+| Medium | Developer operational authority | Integration management; support diagnostics; deploy; broader technical admin | Grant only named technical permissions, no owner transfer or finance by default; separate production access | Avoids accidental authority expansion |
+| Medium | Last active/last seen field | Supabase auth metadata; explicit app event; omit | Omit initially or use privacy-reviewed app activity event; never present an unreliable timestamp | Member overview accuracy/privacy |
+| Medium | Admin notification / invitation sender | Supabase default sender; configured agency SMTP | Configure agency-controlled sender and branded templates; contact mailbox remains contact only | Deliverability and trusted sender identity |
+| Medium | MFA for privileged users | Optional; required for Head/finance admins; defer | Evaluate requiring MFA for member managers and finance approvers before production finance | Phishing and account-takeover impact |
+
+## Provisioning caution
+
+The initial five-person roster is a proposal only. No auth identities or invitations have been created. Before provisioning, approve role mapping and workspace owner. `babeagency.id@gmail.com` remains an agency contact email, not a shared login.
