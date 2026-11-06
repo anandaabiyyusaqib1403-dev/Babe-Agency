@@ -8,7 +8,9 @@ Verified in source:
 
 - Supabase Auth is the identity provider. Browser and server clients use `@supabase/ssr`; the server `getActiveWorkspaceContext()` calls `auth.getUser()` and checks `agency_members.id = auth.users.id` with `is_active=true`.
 - Login uses `signInWithPassword`; logout calls `signOut`; forgot-password uses `resetPasswordForEmail`; password update calls `updateUser({ password })` only after Supabase establishes a valid session.
+- The login entry screen asks for email only. Password appears after the user explicitly chooses “Continue to sign in”; the separate first-time path directs invited members to the emailed activation link without checking or disclosing account status.
 - The PKCE callback at `/auth/callback` exchanges the one-time code server-side and routes to password setup. Invitation callbacks use `flow=invite`; recovery callbacks use `flow=recovery`.
+- `/auth/update-password` verifies the current user on the server and does not render password fields without a valid Supabase session.
 - No application `signUp`, administrator invitation issuance, invitation record/acceptance, invite resend/revoke or Team & Members flow is implemented. The callback UI is not a complete invitation system.
 - `src/proxy.ts` checks authenticated user for a subset of paths. Workspace context also protects many pages/actions; proxy path matching alone is not a complete authorization boundary.
 - There is no checked-in Auth provider configuration for disabling public sign-up. Hosted project setting for sign-up/confirmation, password policy, URL allowlist, SMTP and session lifetime was not exposed by the available read-only inspection; do not assume the remote setting.

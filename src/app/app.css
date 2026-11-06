@@ -868,6 +868,41 @@
   margin-top: var(--space-5);
 }
 
+.login-back-button,
+.login-back-link {
+  display: block;
+  min-height: 40px;
+  margin: var(--space-3) auto 0;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--color-brand-700);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.activation-guidance {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.activation-guidance p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-muted);
+}
+
+.activation-guidance p strong {
+  color: var(--color-text);
+}
+
 .login-recovery-link {
   margin-top: var(--space-3);
   color: var(--color-brand-700);
