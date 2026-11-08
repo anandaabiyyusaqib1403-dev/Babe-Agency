@@ -20,6 +20,9 @@ const agencySchema = z.object({
 export async function saveAgencySettingsAction(form: FormData) {
   const ctx = await getActiveWorkspaceContext();
   if (!ctx) throw new Error("Sign in to save workspace settings.");
+  const canManageWorkspace = ctx.access.permissions?.includes("workspace.manage")
+    || ["owner", "admin"].includes(ctx.access.legacy_role ?? "");
+  if (!canManageWorkspace) throw new Error("Only the workspace administrator can update agency settings.");
   const parsed = agencySchema.safeParse({
     agency_name: field(form, "agency_name"),
     timezone: field(form, "timezone"),
