@@ -16,5 +16,9 @@ export async function getActiveWorkspaceContext() {
     .maybeSingle();
 
   if (error || !member?.is_active) redirect("/workspace");
-  return { supabase, member, user };
+
+  const { data: workspaceAccess, error: accessError } = await supabase.rpc("workspace_my_access");
+  if (accessError || !workspaceAccess?.is_active) redirect("/workspace");
+
+  return { supabase, member, user, access: workspaceAccess };
 }
